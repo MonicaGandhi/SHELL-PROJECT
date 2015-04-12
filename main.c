@@ -16,7 +16,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <pwd.h>
-//navo main
+
 char ShellVariable[MAX_VAR][2][1000];
 int countVar;
 char alias[MAX_VAR][2][100];
@@ -85,7 +85,7 @@ int buildInCmd()
     {
         if(cmds[0].numArg!=1)
         {
-            printf("dont in format : printenv");
+            printf("Error : No parameters for printenv \n");
             return 1;
         }
         int i=0;
@@ -148,7 +148,7 @@ int buildInCmd()
                         //printf("user name %s  ->  %s\n",userName,pw->pw_name);
                         if(strcmp(userName,pw->pw_name)!=0)
                         {
-                            printf("dont exist this file\n");
+                            printf("File does not exist\n");
                             strcpy(currentPath,buf);
                             return 1;
                         }
@@ -170,7 +170,7 @@ int buildInCmd()
         //printf("current path %s\n",currentPath);
         if(chdir (currentPath)!=0)
         {
-                printf("dont exit this file  \n");
+                printf("File does not exist\n");
                 strcpy(currentPath,buf);
                 chdir(currentPath);
                 return 1;
@@ -215,7 +215,7 @@ int buildInCmd()
     {
         if(cmds[0].numArg!=2)
         {
-            printf("must in alias name\n");
+            printf("Not an alias name\n");
             return 1;	
 	}
         int ind  = findAlias(tokens[cmds[0].args[1]]);
@@ -231,7 +231,7 @@ int buildInCmd()
 
     if(strcmp(tokens[cmds[0].args[0]],"bye")==0)
     {
-        exit(-1);
+        exit(0);
         return 1;
     }
 
@@ -240,7 +240,7 @@ int buildInCmd()
 
 int exeNormalCmd()
 {
-// can you comment out so I can unsetand it well?
+
     char path[1000];
     int pid;
     int ip,j;
@@ -295,10 +295,10 @@ int exeNormalCmd()
     }
     if(flag==0)
     {
-        printf("dont exit this command\n");
+        printf("Command does not exist\n");
         return ;
     }
-    if((pid=fork())==0)  // shell create new process by use fork. are you know abut fork. I have heard about it But I dont lknow how fork() works. ok It create new process same shell process. you should read about fork and execp
+    if((pid=fork())==0)  
     {
 
         if(ip==0&&cmds[0].reInput!=-1)
@@ -319,7 +319,7 @@ int exeNormalCmd()
                 */
             if(freopen(tokens[cmds[0].reInput],"r",stdin)==NULL)
             {
-                printf("cant reopen input file %d\n",errno);
+                printf("can't reopen input file %d\n",errno);
             }
         }
         if(ip>0)
@@ -599,7 +599,7 @@ void checkWildcard()
             }
         }
     }
-//print();
+
     for(i=0;i<countCmd;++i)
     {
         for(j=0;j<cmds[i].numArg;++j)
@@ -684,18 +684,20 @@ countVar=0;
 countAlias=0;
 getcwd(currentPath,100);
 
+system("clear");
 while(1)
 {
+	printf("> ");
 	init();
 	readCmd();
 	checkVariable();
 	if(strcmp("unalias",tokens[cmds[0].args[0]])!=0)
 		checkAlias();
-	// now it is ok
+	
 	checkWildcard();
 
 	replaceHomePath();
-    //print();
+ 
 	if(buildInCmd())
         continue;
     exeNormalCmd();
