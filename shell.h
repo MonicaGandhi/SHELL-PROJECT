@@ -11,31 +11,30 @@
 #define YES 1
 #define MAX_VAR 50
 #define Cmd struct cmd
+/*using struct to grouped list of variables to be placed under one name in a block of memory,
+allowing the different variables to be accessed via a single pointer*/
 struct cmd
 {
-	int args[MAX_ARG_NUM];
-	int numArg;
-	int reInput;
-	int reOutput;
-	int reError;
-	int isBackGround;
+	int args[MAX_ARG_NUM];// array of arguments pass
+	int numArg; // number of arguments	
+	int reInput;// redirectional input
+	int reOutput;//redirectional output
+	int reError;// redirectional error
+	int isBackGround; // checks if background is running 
 };
-
-
-
-
-
-extern int countCmd;
-extern char tokens[MAX_TOKEN][MAX_TOKEN_LENG];
-extern int countToken;
-extern Cmd cmds[MAX_CMD];
+/* using extern to explicity define the following variables */
+extern int countCmd; //command count	
+extern char tokens[MAX_TOKEN][MAX_TOKEN_LENG]; //checks the token length entered
+extern int countToken;// token counter	
+extern Cmd cmds[MAX_CMD]; 
 extern char ShellVariable[MAX_VAR][2][1000];
 extern int countVar;
 
-
-
 void initCmd(Cmd *cd);
-
 void init();
 void print();
 #endif
+
+
+
+
