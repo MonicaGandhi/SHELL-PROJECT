@@ -20,7 +20,7 @@ void double_copy(char *a,char *b)
 }
 %}
 %%
-2>&1 {
+2>&1 { /*2 is most standard error and 1 outputs terminal*/
 	strcpy(tokens[countToken++],yytext);
 	yylval=countToken-1;	
 	return REERROR_OUT;
